@@ -7,6 +7,7 @@ class Medecin(models.Model):
     specialite = models.CharField(max_length = 25)
     mail = models.EmailField(max_length=254, blank=True)
     cabinet = models.CharField(max_length = 25)
+    Photo = models.ImageField(upload_to='medecin_photos/', null=True, blank=True) 
    
     def __str__(self):
         return f"{self.matricule} - {self.nom} {self.prenom}"
