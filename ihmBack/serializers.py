@@ -21,11 +21,13 @@ class HoraireSerializer(serializers.ModelSerializer):
 
 
 class UtilisateurSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=False)
 
     class Meta:
         model = Utilisateur
-        fields = ['id', 'username', 'email', 'first_name' , 'last_name' , 'contact' , 'password' ]
+        fields = ['id', 'username', 'email', 'first_name' , 'last_name' , 'contact' , 'password' , 'UserPhoto']
+        extra_kwargs = {'UserPhoto': {'required': False}}
+
 
     def create(self, validated_data):
         password = validated_data.pop('password')

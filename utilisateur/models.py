@@ -30,7 +30,7 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     contact = models.CharField(max_length=30, blank=True)
- 
+    UserPhoto = models.ImageField(upload_to='patient_photos/', null=True, blank=True) 
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
