@@ -21,7 +21,7 @@ class UtilisateurRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView
     serializer_class = UtilisateurSerializer
 
 class MyTokenObtainPairView(TokenObtainPairView):
-    permission_classes = (AllowAny,)
+    permission_classes = [AllowAny]
 
 class UserDetailsAPIView(APIView):
     authentication_classes = [ JWTAuthentication]
