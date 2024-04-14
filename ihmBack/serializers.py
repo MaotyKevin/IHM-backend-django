@@ -19,6 +19,9 @@ class SpelialiteSerializer(serializers.ModelSerializer):
         model = Specialization
         fields = '__all__'
 
+
+
+
 class MedecinSerializer(serializers.ModelSerializer):
     Grade = GradeSerializer(source='id', read_only=True)
     Specialization = SpelialiteSerializer(source='id', read_only=True)
