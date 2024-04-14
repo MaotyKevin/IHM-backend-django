@@ -38,7 +38,7 @@ class SGListCreateView(generics.ListAPIView):
         response = super().list(request, *args, **kwargs)
         
    
-        new_specialization = {'id': response.data[-1]['id'] + 1, 'specialite': 'Generaliste'}
+        new_specialization = {'id': response.data[-1]['id'] + 2, 'specialite': 'Generaliste'}
 
         response.data.append(new_specialization)
         
