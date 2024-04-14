@@ -2,12 +2,26 @@
 
 from rest_framework import serializers
 from horaire.models import Horaire
-from medecin.models import Medecin
+from medecin.models import Medecin , Grade , Specialization
 from utilisateur.models import Utilisateur
 from reservation.models import Reservation
 from horaireMedecin.models import HoraireMedecin
 
+class GradeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Grade
+        fields = '__all__'
+
+class SpelialiteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Specialization
+        fields = '__all__'
+
 class MedecinSerializer(serializers.ModelSerializer):
+    Grade = GradeSerializer(source='id', read_only=True)
+    Specialization = SpelialiteSerializer(source='id', read_only=True)
     class Meta:
         model = Medecin
         fields = '__all__'
