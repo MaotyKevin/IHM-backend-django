@@ -30,7 +30,7 @@ class MedecinRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Medecin.objects.all()
     serializer_class = MedecinSerializer
 
-class SGListCreateView(generics.ListCreateAPIView):
+class SGListCreateView(generics.ListAPIView):
     queryset = Specialization.objects.all()
     serializer_class = SpelialiteSerializer
 
