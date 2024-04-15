@@ -1,6 +1,7 @@
 # poste/serializers.py
 
 from rest_framework import serializers
+from django.core.exceptions import ObjectDoesNotExist
 from horaire.models import Horaire
 from medecin.models import Medecin , Grade , Specialization
 from utilisateur.models import Utilisateur
@@ -62,6 +63,11 @@ class UtilisateurSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+    
 class ReservationSerializer(serializers.ModelSerializer):
     utilisateur = UtilisateurSerializer(source='id', read_only=True)
     medecin = MedecinSerializer(source='matricule', read_only=True)
@@ -90,6 +96,21 @@ class HostoriqueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ['doctor_name', 'image_doc', 'dateHeure' , 'gradeDoc' , 'cabinet']
+
+class UserWithReservationSerializer(serializers.ModelSerializer):
+    most_recent_reservation = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Utilisateur
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'contact', 'UserPhoto', 'most_recent_reservation']
+
+    def get_most_recent_reservation(self, obj):
+        try:
+            most_recent_reservation = obj.reservation_set.latest('dateHeure').dateHeure
+        except ObjectDoesNotExist:
+            most_recent_reservation = None
+        return most_recent_reservation
+
 
 
 
