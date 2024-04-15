@@ -38,7 +38,7 @@ class HoraireSerializer(serializers.ModelSerializer):
 
 
 class UtilisateurSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=False)
+    password = serializers.CharField(write_only=True , required=False)
 
     class Meta:
         model = Utilisateur
@@ -77,6 +77,19 @@ class HoraireMedecinSerializer(serializers.ModelSerializer):
     class Meta:
         model = HoraireMedecin
         fields = '__all__'
+
+class HostoriqueSerializer(serializers.ModelSerializer):
+
+    doctor_name = serializers.CharField(source='matricule.nom')
+    image_doc = serializers.CharField(source='matricule.Photo')
+    dateHeure = serializers.DateTimeField()
+    gradeDoc = serializers.CharField(source='matricule.grade')
+    cabinet = serializers.CharField(source='matricule.cabinet')
+    
+
+    class Meta:
+        model = Reservation
+        fields = ['doctor_name', 'image_doc', 'dateHeure' , 'gradeDoc' , 'cabinet']
 
 
 
