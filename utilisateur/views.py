@@ -3,7 +3,7 @@
 from rest_framework import generics, viewsets , status
 from django.contrib.auth.hashers import check_password
 from .models import Utilisateur
-from ihmBack.serializers import UtilisateurSerializer , ChangePasswordSerializer
+from ihmBack.serializers import UtilisateurSerializer , ChangePasswordSerializer , PhotoUpdateSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny , IsAuthenticated
 from rest_framework.views import APIView
@@ -58,3 +58,15 @@ class ChangePasswordViewSet(viewsets.ViewSet):
         user.save()
 
         return Response({'success': 'Password changed successfully'}, status=status.HTTP_200_OK)
+
+
+class PhotoUpdateAPIView(APIView):
+    authentication_classes = [ JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    def patch(self, request, *args, **kwargs):
+        instance = self.request.user 
+        serializer = PhotoUpdateSerializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

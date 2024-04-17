@@ -147,6 +147,12 @@ def group_by_week(data):
             grouped_data[debut_week].append(entry)
     return grouped_data
 
+class PhotoUpdateSerializer(serializers.ModelSerializer):
+    UserPhoto = serializers.ImageField(max_length=None, use_url=True)
+    class Meta:
+        model = Utilisateur
+        fields = ['UserPhoto']
+
 
 
     

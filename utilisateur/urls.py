@@ -2,7 +2,7 @@
 
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import UtilisateurListCreateView , UtilisateurRetrieveUpdateDestroyView , MyTokenObtainPairView , UserDetailsAPIView , ChangePasswordViewSet
+from .views import UtilisateurListCreateView , UtilisateurRetrieveUpdateDestroyView , MyTokenObtainPairView , UserDetailsAPIView , ChangePasswordViewSet , PhotoUpdateAPIView
 
 urlpatterns = [
   
@@ -13,4 +13,6 @@ urlpatterns = [
     path('login/user-details/', UserDetailsAPIView.as_view(), name='user-details'),
 
     path('change-PSWD/', ChangePasswordViewSet.as_view({'post': 'change_password'}), name='change-PSWD'),
+
+    path('PhotoUpdate/<int:pk>/', PhotoUpdateAPIView.as_view(), name='PhotoUpdate'),
 ]
