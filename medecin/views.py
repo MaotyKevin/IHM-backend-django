@@ -1,6 +1,6 @@
 # medecin/views.py
 
-from rest_framework import generics , status
+from rest_framework import generics , status , viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Medecin , Grade , Specialization
@@ -43,3 +43,6 @@ class SGListCreateView(generics.ListAPIView):
         response.data.append(new_specialization)
         
         return response
+
+
+    

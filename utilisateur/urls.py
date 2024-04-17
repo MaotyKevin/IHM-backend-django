@@ -10,7 +10,7 @@ urlpatterns = [
     path('utilisateur/<int:pk>/', UtilisateurRetrieveUpdateDestroyView.as_view(), name='utilisateur-detail'),
     path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),  # Token generation
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Token refresh
-    path('login/user-details/<int:user>/', UserDetailsAPIView.as_view(), name='user-details'),
+    path('login/user-details/', UserDetailsAPIView.as_view(), name='user-details'),
 
     path('change-PSWD/', ChangePasswordViewSet.as_view({'post': 'change_password'}), name='change-PSWD'),
 ]

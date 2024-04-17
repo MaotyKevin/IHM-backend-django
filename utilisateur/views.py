@@ -34,6 +34,7 @@ class UserDetailsAPIView(APIView):
         return Response(serializer.data)
     
 class ChangePasswordViewSet(viewsets.ViewSet):
+    authentication_classes = [ JWTAuthentication]
     permission_classes = [IsAuthenticated]
     def change_password(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
@@ -42,15 +43,15 @@ class ChangePasswordViewSet(viewsets.ViewSet):
         user = request.user
         old_password = serializer.validated_data['old_password']
         new_password = serializer.validated_data['new_password']
-        confirm_password = serializer.validated_data['confirm_password']
+        #confirm_password = serializer.validated_data['confirm_password']
 
         # Check if old password matches
         if not check_password(old_password, user.password):
             return Response({'error': 'Invalid old password'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Check if new password matches the confirmation
-        if new_password != confirm_password:
-            return Response({'error': 'New password and confirm password do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        #if new_password != confirm_password:
+            #return Response({'error': 'New password and confirm password do not match'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Set the new password
         user.set_password(new_password)

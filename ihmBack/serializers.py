@@ -110,6 +110,13 @@ class UserWithReservationSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             most_recent_reservation = None
         return most_recent_reservation
+    
+
+
+
+
+
+
 
 
 
