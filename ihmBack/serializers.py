@@ -1,6 +1,7 @@
 # poste/serializers.py
 
 from rest_framework import serializers
+from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from horaire.models import Horaire
 from medecin.models import Medecin , Grade , Specialization
@@ -110,6 +111,43 @@ class UserWithReservationSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             most_recent_reservation = None
         return most_recent_reservation
+    
+class EDTSerializer(serializers.ModelSerializer):
+    matricule = serializers.StringRelatedField(source='matricule.matricule')
+    username = serializers.SerializerMethodField()
+    debut = serializers.DateTimeField(source='horaireID.debut')
+    fin = serializers.DateTimeField(source='horaireID.fin')
+
+    class Meta:
+        model = HoraireMedecin
+        fields = ['HoraireMedecinID', 'matricule', 'libre', 'username', 'debut', 'fin']
+
+    def get_username(self, obj):
+        try:
+            reservation = Reservation.objects.get(matricule=obj.matricule)
+            return reservation.id.username
+        except Reservation.DoesNotExist:
+            return None
+        
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['debut'] = instance.horaireID.debut  # Assuming debut is already a datetime object
+        return representation
+        
+def group_by_week(data):
+    grouped_data = {}
+    for entry in data:
+        debut = entry['debut']
+        print(type(debut))
+        if debut:
+            debut_week = debut.isocalendar()[1]
+            if debut_week not in grouped_data:
+                grouped_data[debut_week] = []
+            grouped_data[debut_week].append(entry)
+    return grouped_data
+
+
+
     
 
 
