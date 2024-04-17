@@ -155,6 +155,25 @@ class PhotoUpdateSerializer(serializers.ModelSerializer):
 
 
 
+class DISPOSerializer(serializers.ModelSerializer):
+    nom = serializers.SerializerMethodField()
+    specialization = serializers.CharField(source='specialization.specialite')
+    grade = serializers.CharField(source='grade.nomGrade')
+    Date = serializers.SerializerMethodField()
+    disponibilite = serializers.ListField(child=serializers.CharField())
+
+    class Meta:
+        model = Medecin
+        fields = ['nom', 'specialization', 'grade', 'Date', 'disponibilite']
+
+    def get_nom(self, obj):
+        return f"{obj.nom} {obj.prenom}"
+
+    def get_Date(self, obj):
+        return obj.horairemedecin_set.first().horaireID.debut.strftime('%Y-%m-%dT%H:%M:%S')
+
+
+
     
 
 
