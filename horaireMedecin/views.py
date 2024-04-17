@@ -20,6 +20,7 @@ class Horaire_AND_HMCreateView(APIView):
         debut = request.data.get('debut')
         fin = request.data.get('fin')
         matricule = request.data.get('matricule')
+        libre = request.data.get('libre')
 
         # Create a new entry in the Horaire table
         horaire_serializer = HoraireSerializer(data={'debut': debut, 'fin': fin})
@@ -27,7 +28,7 @@ class Horaire_AND_HMCreateView(APIView):
             horaire = horaire_serializer.save()
 
             # Create a new entry in the HoraireMedecin table
-            horaire_medecin_serializer = HoraireMedecinSerializer(data={'horaireID': horaire.pk, 'matricule': matricule})
+            horaire_medecin_serializer = HoraireMedecinSerializer(data={'horaireID': horaire.pk, libre: 'libre' , matricule:'matricule'})
             if horaire_medecin_serializer.is_valid():
                 horaire_medecin_serializer.save()
                 return Response(horaire_medecin_serializer.data, status=status.HTTP_201_CREATED)
