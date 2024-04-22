@@ -1,5 +1,5 @@
 # utilisateurs/views.py
-
+import os
 from rest_framework import generics, viewsets , status
 from django.contrib.auth.hashers import check_password
 from .models import Utilisateur
@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication , SessionAuthentication , BasicAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.core.files.storage import default_storage
 
 
 
@@ -61,12 +62,17 @@ class ChangePasswordViewSet(viewsets.ViewSet):
 
 
 class PhotoUpdateAPIView(APIView):
-    authentication_classes = [ JWTAuthentication]
-    permission_classes = [IsAuthenticated]
     def patch(self, request, *args, **kwargs):
-        instance = self.request.user 
-        serializer = PhotoUpdateSerializer(instance, data=request.data, partial=True)
+        user = self.request.user
+        serializer = PhotoUpdateSerializer(user, data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+            # Save the photo to the appropriate location
+            photo = serializer.validated_data.get('UserPhoto')
+            if photo:
+                file_path = default_storage.save(os.path.join('patient_photos', photo.name), photo)
+                user.UserPhoto = file_path
+                user.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response("No photo provided", status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

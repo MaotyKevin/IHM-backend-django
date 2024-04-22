@@ -1,5 +1,5 @@
 # poste/serializers.py
-
+import os
 from rest_framework import serializers
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
@@ -148,7 +148,8 @@ def group_by_week(data):
     return grouped_data
 
 class PhotoUpdateSerializer(serializers.ModelSerializer):
-    UserPhoto = serializers.ImageField(max_length=None, use_url=True)
+    UserPhoto = serializers.ImageField(required=False)
+
     class Meta:
         model = Utilisateur
         fields = ['UserPhoto']
