@@ -27,8 +27,7 @@ class AccountManager(BaseUserManager):
 class Utilisateur(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(max_length=254, blank=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    
     contact = models.CharField(max_length=30, blank=True)
     UserPhoto = models.ImageField(upload_to='patient_photos/', null=True, blank=True) 
 
