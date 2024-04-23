@@ -154,6 +154,13 @@ class PhotoUpdateSerializer(serializers.ModelSerializer):
         model = Utilisateur
         fields = ['UserPhoto']
 
+class PhotoMedecinSerializer(serializers.ModelSerializer):
+    Photo = serializers.ImageField(required=True)
+
+    class Meta:
+        model = Medecin
+        fields = ['Photo']
+
 
 
 class DISPOSerializer(serializers.ModelSerializer):

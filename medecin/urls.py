@@ -1,7 +1,7 @@
 # medecin/urls.py
 
 from django.urls import path
-from .views import MedecinListCreateView , MedecinRetrieveUpdateDestroyView , GradeListCreateView , GradeRetrieveUpdateDestroyView , SpecialisteListCreateView , SpecialisteRetrieveUpdateDestroyView  , SGListCreateView , MedecinAvailabilityView
+from .views import MedecinListCreateView , MedecinRetrieveUpdateDestroyView , GradeListCreateView , GradeRetrieveUpdateDestroyView , SpecialisteListCreateView , SpecialisteRetrieveUpdateDestroyView  , SGListCreateView , MedecinAvailabilityView , PhotoMedecinAPIView
 
 urlpatterns = [
   
@@ -19,5 +19,5 @@ urlpatterns = [
 
     path('DISPO/', MedecinAvailabilityView.as_view(), name='DISPO'),
 
-
+    path('PhotoUpdate/<str:pk>/', PhotoMedecinAPIView.as_view(), name='PhotoUpdate'),
 ]

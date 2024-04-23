@@ -18,7 +18,7 @@ class Medecin(models.Model):
     prenom = models.CharField(max_length = 25)
     mail = models.EmailField(max_length=254, blank=True)
     cabinet = models.CharField(max_length = 25)
-    Photo = models.ImageField(upload_to='medecin_photos/', null=True, blank=True) 
+    Photo = models.ImageField(upload_to='medecin_photos/', null=False, default=None, blank=True) 
     tarif = models.IntegerField(null=True)
     grade = models.ForeignKey(Grade, on_delete=models.SET_NULL , null=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.SET_NULL, blank=True, null=True)   
