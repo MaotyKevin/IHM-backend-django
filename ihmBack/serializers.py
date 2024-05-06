@@ -38,6 +38,16 @@ class HoraireSerializer(serializers.ModelSerializer):
         model = Horaire
         fields = '__all__'
 
+    def validate(self, data):
+        # Check if debut and fin together already exist in the database
+        debut = data.get('debut')
+        fin = data.get('fin')
+        if debut is not None and fin is not None:
+            existing_horaire = Horaire.objects.filter(debut=debut, fin=fin).exists()
+            if existing_horaire:
+                raise serializers.ValidationError("Horaire with this debut and fin already exists.")
+        return data
+
 
 class UtilisateurSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True , required=False)
