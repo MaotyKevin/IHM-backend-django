@@ -13,3 +13,16 @@ class Reservation(models.Model):
    
     def __str__(self):
         return f"id : {self.reservationID} par {self.id} avec le docteur {self.matricule}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+ 
+        horaire_medecin = HoraireMedecin.objects.filter(
+            matricule=self.matricule,
+            horaireID__debut__lte=self.dateHeure,
+            horaireID__fin__gte=self.dateHeure
+        ).first()
+        if horaire_medecin:
+            horaire_medecin.libre = False
+            #horaire_medecin.save()
+            horaire_medecin.save(update_fields=['libre'])
