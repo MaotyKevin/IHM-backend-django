@@ -1,7 +1,7 @@
 # reservation/urls.py
 
 from django.urls import path
-from .views import HoraireMedecinListCreateView , HoraireMedecinRetrieveUpdateDestroyView , Horaire_AND_HMCreateView , EDTAPIView
+from .views import HoraireMedecinListCreateView , HoraireMedecinRetrieveUpdateDestroyView , Horaire_AND_HMCreateView  , GetDataForMedecinBetweenDates
 
 urlpatterns = [
  
@@ -10,5 +10,6 @@ urlpatterns = [
 
     path('Horaire&HM/', Horaire_AND_HMCreateView.as_view(), name='Horaire$HM'),
 
-    path('EDT/', EDTAPIView.as_view(), name='EDT'),
+    path('edt/', GetDataForMedecinBetweenDates.as_view(), name='edt'),
+
 ]

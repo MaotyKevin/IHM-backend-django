@@ -3,8 +3,12 @@
 from rest_framework import generics , status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import HoraireMedecin
-from ihmBack.serializers import HoraireMedecinSerializer , HoraireSerializer , EDTSerializer , group_by_week
+from .models import HoraireMedecin 
+from reservation.models import Reservation
+from utilisateur.models import Utilisateur
+from ihmBack.serializers import HoraireMedecinSerializer , HoraireSerializer , UserEDTSerializer
+from datetime import datetime
+import json
 
 
 class HoraireMedecinListCreateView(generics.ListCreateAPIView):
@@ -35,10 +39,53 @@ class Horaire_AND_HMCreateView(APIView):
         
         return Response(horaire_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class EDTAPIView(APIView):
-    def get(self, request, format=None):
-        horaires_medecins = HoraireMedecin.objects.all()
-        serializer = EDTSerializer(horaires_medecins, many=True)
-        grouped_data = group_by_week(serializer.data)
-        return Response(grouped_data)
+
+def get_data_for_medecin_between_dates(medecin_matricule, start_date, end_date):
+
+    horaire_medecin_objects = HoraireMedecin.objects.filter(
+        horaireID__debut__gte=start_date,
+        horaireID__fin__lte=end_date,
+        matricule__matricule=medecin_matricule
+    )
+
+    reservation_objects = Reservation.objects.filter(
+        dateHeure__gte=start_date,
+        dateHeure__lte=end_date,
+        matricule__matricule=medecin_matricule
+    )
+
+    return horaire_medecin_objects, reservation_objects
+
+class GetDataForMedecinBetweenDates(APIView):
+    def post(self, request):
+        data = request.data
+        medecin_matricule = data.get('medecin_matricule')
+        start_date = datetime.strptime(data.get('start_date'), '%Y-%m-%dT%H:%M:%SZ')
+        end_date = datetime.strptime(data.get('end_date'), '%Y-%m-%dT%H:%M:%SZ')
+
+        horaire_medecin_objects, reservation_objects = get_data_for_medecin_between_dates(medecin_matricule, start_date, end_date)
+
+        result = []
+        for horaire_medecin in horaire_medecin_objects:
+            data = {
+                "matricule": medecin_matricule,
+                "horaire_medecin_id": horaire_medecin.HoraireMedecinID,
+                "debut": horaire_medecin.horaireID.debut,
+                "fin": horaire_medecin.horaireID.fin,
+                "libre": horaire_medecin.libre,
+                "reservations": []
+            }
+            for reservation in reservation_objects:
+                if (reservation.dateHeure >= horaire_medecin.horaireID.debut and
+                        reservation.dateHeure <= horaire_medecin.horaireID.fin):
+                    data["reservations"].append(reservation.id.username)
+            result.append(data)
+
+
+
+        return Response(result)
+    
+
+    
+
 

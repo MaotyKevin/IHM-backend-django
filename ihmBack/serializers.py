@@ -79,21 +79,23 @@ class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
-    
-class ReservationSerializer(serializers.ModelSerializer):
-    utilisateur = UtilisateurSerializer(source='id', read_only=True)
-    medecin = MedecinSerializer(source='matricule', read_only=True)
-
-    class Meta:
-        model = Reservation
-        fields = '__all__'
 
 class HoraireMedecinSerializer(serializers.ModelSerializer):
     horaire = HoraireSerializer(source='horaireID', read_only=True)
     medecin = MedecinSerializer(source='matricule', read_only=True)
+    
 
     class Meta:
         model = HoraireMedecin
+        fields = '__all__'
+
+class ReservationSerializer(serializers.ModelSerializer):
+    utilisateur = UtilisateurSerializer(source='id', read_only=True)
+    medecin = MedecinSerializer(source='matricule', read_only=True)
+    horaireMedecin = HoraireMedecinSerializer(source='HoraireMedecinID' , read_only=True)
+
+    class Meta:
+        model = Reservation
         fields = '__all__'
 
 class HostoriqueSerializer(serializers.ModelSerializer):
@@ -123,39 +125,7 @@ class UserWithReservationSerializer(serializers.ModelSerializer):
             most_recent_reservation = None
         return most_recent_reservation
     
-class EDTSerializer(serializers.ModelSerializer):
-    matricule = serializers.StringRelatedField(source='matricule.matricule')
-    username = serializers.SerializerMethodField()
-    debut = serializers.DateTimeField(source='horaireID.debut')
-    fin = serializers.DateTimeField(source='horaireID.fin')
 
-    class Meta:
-        model = HoraireMedecin
-        fields = ['HoraireMedecinID', 'matricule', 'libre', 'username', 'debut', 'fin']
-
-    def get_username(self, obj):
-        try:
-            reservation = Reservation.objects.get(matricule=obj.matricule)
-            return reservation.id.username
-        except Reservation.DoesNotExist:
-            return None
-        
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['debut'] = instance.horaireID.debut  # Assuming debut is already a datetime object
-        return representation
-        
-def group_by_week(data):
-    grouped_data = {}
-    for entry in data:
-        debut = entry['debut']
-        print(type(debut))
-        if debut:
-            debut_week = debut.isocalendar()[1]
-            if debut_week not in grouped_data:
-                grouped_data[debut_week] = []
-            grouped_data[debut_week].append(entry)
-    return grouped_data
 
 class PhotoUpdateSerializer(serializers.ModelSerializer):
     UserPhoto = serializers.ImageField(required=False)
@@ -171,7 +141,11 @@ class PhotoMedecinSerializer(serializers.ModelSerializer):
         model = Medecin
         fields = ['Photo']
 
-
+class UserEDTSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='id')
+    class Meta:
+        model = Utilisateur
+        fields = ['user_id']
 
 class DISPOSerializer(serializers.ModelSerializer):
     nom = serializers.SerializerMethodField()
@@ -189,6 +163,8 @@ class DISPOSerializer(serializers.ModelSerializer):
 
     def get_Date(self, obj):
         return obj.horairemedecin_set.first().horaireID.debut.strftime('%Y-%m-%dT%H:%M:%S')
+    
+
 
 
 
