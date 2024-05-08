@@ -109,7 +109,7 @@ class get_dispo(APIView):
                     "disponibility": []
                 }
                 if medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day and medecins.horaireID.debut.hour >= ref_date.hour:
-                    data["disponibility"].append(medecins.horaireID.debut)
+                    data["disponibility"].append(f"{medecins.horaireID.debut.hour}:{str(medecins.horaireID.debut.minute).zfill(2)}")
                 result.append(data)
 
         return Response(result)
