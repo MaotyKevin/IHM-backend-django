@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import HoraireMedecin 
 from reservation.models import Reservation
 from utilisateur.models import Utilisateur
-from ihmBack.serializers import HoraireMedecinSerializer , HoraireSerializer , UserEDTSerializer
+from ihmBack.serializers import HoraireMedecinSerializer , HoraireSerializer 
 from datetime import datetime
 import json
 
@@ -82,6 +82,35 @@ class GetDataForMedecinBetweenDates(APIView):
             result.append(data)
 
 
+
+        return Response(result)
+    
+def get_medecin_datas_dispo(medecin_matricule):
+    medecin_object = HoraireMedecin.objects.filter(matricule__matricule = medecin_matricule)
+
+    return medecin_object
+
+class get_dispo(APIView):
+    def post(self, request , medecin_matricule):
+        data = request.data
+        ref_date = datetime.strptime(data.get('ref_date'), '%Y-%m-%dT%H:%M:%SZ')
+
+        medecin_object = get_medecin_datas_dispo(medecin_matricule)
+
+        result = []
+        for medecins in medecin_object:
+            if medecins.libre == True:
+                data = {
+                    "matricule": medecin_matricule,
+                    "nom": medecins.matricule.nom,
+                    "grade": medecins.matricule.grade.nomGrade,
+                    "specialization": medecins.matricule.specialization.specialite,
+                    "horaireMedecinID": medecins.HoraireMedecinID,
+                    "disponibility": []
+                }
+                if medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day and medecins.horaireID.debut.hour >= ref_date.hour:
+                    data["disponibility"].append(medecins.horaireID.debut)
+                result.append(data)
 
         return Response(result)
     
