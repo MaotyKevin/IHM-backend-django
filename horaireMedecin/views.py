@@ -104,7 +104,7 @@ class get_dispo(APIView):
 
         result = []
         for medecins in medecin_object:
-            if medecins.libre == True:
+            if medecins.libre == True and medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day:
                 data = {
                     "matricule": medecins.matricule.matricule,
                     "nom": medecins.matricule.nom,
@@ -113,8 +113,8 @@ class get_dispo(APIView):
                     "horaireMedecinID": medecins.HoraireMedecinID,
                     "disponibility": []
                 }
-                if medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day :
-                    data["disponibility"].append(f"{medecins.horaireID.debut.hour}:{str(medecins.horaireID.debut.minute).zfill(2)}")
+                #if medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day :
+                data["disponibility"].append(f"{medecins.horaireID.debut.hour}:{str(medecins.horaireID.debut.minute).zfill(2)}")
                 result.append(data)
 
         return Response(result)
