@@ -72,6 +72,8 @@ class UtilisateurSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         if password is not None:
             instance.set_password(password)
+        if UserPhoto is not None:
+            instance.UserPhoto = UserPhoto
         instance.save()
         return instance
     
