@@ -102,22 +102,25 @@ class get_dispo(APIView):
 
         medecin_object = get_medecin_datas_dispo(specialization)
 
-        result = []
+        result = {}
         for medecins in medecin_object:
             if medecins.libre == True and medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day:
-                data = {
-                    "matricule": medecins.matricule.matricule,
-                    "nom": medecins.matricule.nom,
-                    "grade": medecins.matricule.grade.nomGrade,
-                    "specialization": medecins.matricule.specialization.specialite,
-                    "horaireMedecinID": medecins.HoraireMedecinID,
-                    "disponibility": []
-                }
-                #if medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day :
-                data["disponibility"].append(f"{medecins.horaireID.debut.hour}:{str(medecins.horaireID.debut.minute).zfill(2)}")
-                result.append(data)
+                if medecins.matricule.matricule not in result:
+                    result[medecins.matricule.matricule] = {
+                        "matricule": medecins.matricule.matricule,
+                        "nom": medecins.matricule.nom,
+                        "grade": medecins.matricule.grade.nomGrade,
+                        "specialization": medecins.matricule.specialization.specialite,
+                        "horaireMedecinID": [],
+                        "disponibility": []
+                    }
+                result[medecins.matricule.matricule]["horaireMedecinID"].append(medecins.HoraireMedecinID)
+                result[medecins.matricule.matricule]["disponibility"].append(f"{medecins.horaireID.debut.hour}:{str(medecins.horaireID.debut.minute).zfill(2)}")
 
-        return Response(result)
+     
+        result_list = list(result.values())
+
+        return Response(result_list)
     
 
     
