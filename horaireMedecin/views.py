@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import HoraireMedecin 
 from reservation.models import Reservation
 from utilisateur.models import Utilisateur
-from medecin.models import Medecin
+from medecin.models import Medecin , Specialization
 from ihmBack.serializers import HoraireMedecinSerializer , HoraireSerializer 
 from datetime import datetime
 import json
@@ -84,14 +84,20 @@ class GetDataForMedecinBetweenDates(APIView):
     
     
 def get_medecin_datas_dispo(specialization):
-    medecin_matricules = Medecin.objects.filter(specialization=specialization)
+    try:
+        special_id = Specialization.objects.get(specialite=specialization)
+    except Specialization.DoesNotExist:
+        return None
+
+    medecin_matricules = Medecin.objects.filter(specialization=special_id)
     medecin_objects = HoraireMedecin.objects.filter(matricule__in=medecin_matricules)
 
     return medecin_objects
 
 class get_dispo(APIView):
-    def post(self, request , specialization):
+    def post(self, request):
         data = request.data
+        specialization = data.get('specialization')
         ref_date = datetime.strptime(data.get('ref_date'), '%Y-%m-%dT%H:%M:%SZ')
 
         medecin_object = get_medecin_datas_dispo(specialization)
