@@ -12,6 +12,6 @@ urlpatterns = [
 
     path('edt/', GetDataForMedecinBetweenDates.as_view(), name='edt'),
 
-    path('dispo/<str:medecin_matricule>/', get_dispo.as_view(), name='dispo'),
+    path('dispo/<str:specialization>/', get_dispo.as_view(), name='dispo'),
 
 ]

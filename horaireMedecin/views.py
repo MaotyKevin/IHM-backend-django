@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import HoraireMedecin 
 from reservation.models import Reservation
 from utilisateur.models import Utilisateur
+from medecin.models import Medecin
 from ihmBack.serializers import HoraireMedecinSerializer , HoraireSerializer 
 from datetime import datetime
 import json
@@ -66,8 +67,8 @@ class GetDataForMedecinBetweenDates(APIView):
             data = {
                 "matricule": medecin_matricule,
                 "horaire_medecin_id": horaire_medecin.HoraireMedecinID,
-                #"debut": horaire_medecin.horaireID.debut,
-                #"fin": horaire_medecin.horaireID.fin,
+                "debut": horaire_medecin.horaireID.debut,
+                "fin": horaire_medecin.horaireID.fin,
                 "libre": horaire_medecin.libre,
                 "reservations": []
             }
@@ -81,30 +82,32 @@ class GetDataForMedecinBetweenDates(APIView):
 
         return Response(result)
     
-def get_medecin_datas_dispo(medecin_matricule):
-    medecin_object = HoraireMedecin.objects.filter(matricule__matricule = medecin_matricule)
+    
+def get_medecin_datas_dispo(specialization):
+    medecin_matricules = Medecin.objects.filter(specialization=specialization)
+    medecin_objects = HoraireMedecin.objects.filter(matricule__in=medecin_matricules)
 
-    return medecin_object
+    return medecin_objects
 
 class get_dispo(APIView):
-    def post(self, request , medecin_matricule):
+    def post(self, request , specialization):
         data = request.data
         ref_date = datetime.strptime(data.get('ref_date'), '%Y-%m-%dT%H:%M:%SZ')
 
-        medecin_object = get_medecin_datas_dispo(medecin_matricule)
+        medecin_object = get_medecin_datas_dispo(specialization)
 
         result = []
         for medecins in medecin_object:
             if medecins.libre == True:
                 data = {
-                    "matricule": medecin_matricule,
+                    "matricule": medecins.matricule.matricule,
                     "nom": medecins.matricule.nom,
                     "grade": medecins.matricule.grade.nomGrade,
                     "specialization": medecins.matricule.specialization.specialite,
                     "horaireMedecinID": medecins.HoraireMedecinID,
                     "disponibility": []
                 }
-                if medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day and medecins.horaireID.debut.hour >= ref_date.hour:
+                if medecins.horaireID.debut.year == ref_date.year and medecins.horaireID.debut.month == ref_date.month and medecins.horaireID.debut.day == ref_date.day :
                     data["disponibility"].append(f"{medecins.horaireID.debut.hour}:{str(medecins.horaireID.debut.minute).zfill(2)}")
                 result.append(data)
 
