@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 08, 2024 at 12:11 PM
+-- Generation Time: Jun 04, 2024 at 01:08 AM
 -- Server version: 10.6.12-MariaDB-0ubuntu0.22.04.1
 -- PHP Version: 8.1.2-1ubuntu2.14
 
@@ -308,7 +308,9 @@ INSERT INTO `horaireMedecin_horairemedecin` (`HoraireMedecinID`, `horaireID_id`,
 (2, 2, '222344', 0),
 (3, 3, '773453', 0),
 (7, 10, '773453', 0),
-(8, 12, '222344', 1);
+(8, 12, '222344', 1),
+(9, 13, '222344', 1),
+(10, 14, '44563', 1);
 
 -- --------------------------------------------------------
 
@@ -331,7 +333,9 @@ INSERT INTO `horaire_horaire` (`horaireID`, `debut`, `fin`) VALUES
 (3, '2024-04-01 07:30:00.000000', '2024-04-01 09:00:00.000000'),
 (10, '2024-05-06 09:00:00.000000', '2024-05-06 10:00:00.000000'),
 (11, '2024-05-06 09:00:00.000000', '2024-05-06 11:00:00.000000'),
-(12, '2024-04-29 12:00:00.000000', '2024-04-29 13:00:00.000000');
+(12, '2024-04-29 12:00:00.000000', '2024-04-29 13:00:00.000000'),
+(13, '2024-04-29 21:15:00.000000', '2024-04-29 22:00:00.000000'),
+(14, '2024-04-29 08:30:00.000000', '2024-04-29 09:45:00.000000');
 
 -- --------------------------------------------------------
 
@@ -685,13 +689,13 @@ ALTER TABLE `django_migrations`
 -- AUTO_INCREMENT for table `horaireMedecin_horairemedecin`
 --
 ALTER TABLE `horaireMedecin_horairemedecin`
-  MODIFY `HoraireMedecinID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `HoraireMedecinID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `horaire_horaire`
 --
 ALTER TABLE `horaire_horaire`
-  MODIFY `horaireID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `horaireID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `medecin_grade`
