@@ -40,17 +40,13 @@ class Horaire_AND_HMCreateView(APIView):
         return Response(horaire_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-def get_data_for_medecin_between_dates(medecin_matricule, start_date, end_date):
+def get_data_for_medecin_between_dates(medecin_matricule ):
 
     horaire_medecin_objects = HoraireMedecin.objects.filter(
-        horaireID__debut__gte=start_date,
-        horaireID__fin__lte=end_date,
         matricule__matricule=medecin_matricule
     )
 
     reservation_objects = Reservation.objects.filter(
-        dateHeure__gte=start_date,
-        dateHeure__lte=end_date,
         matricule__matricule=medecin_matricule
     )
 
@@ -60,24 +56,24 @@ class GetDataForMedecinBetweenDates(APIView):
     def post(self, request):
         data = request.data
         medecin_matricule = data.get('medecin_matricule')
-        start_date = datetime.strptime(data.get('start_date'), '%Y-%m-%dT%H:%M:%SZ')
-        end_date = datetime.strptime(data.get('end_date'), '%Y-%m-%dT%H:%M:%SZ')
+        #start_date = datetime.strptime(data.get('start_date'), '%Y-%m-%dT%H:%M:%SZ')
+        #end_date = datetime.strptime(data.get('end_date'), '%Y-%m-%dT%H:%M:%SZ')
 
-        horaire_medecin_objects, reservation_objects = get_data_for_medecin_between_dates(medecin_matricule, start_date, end_date)
+        horaire_medecin_objects, reservation_objects = get_data_for_medecin_between_dates(medecin_matricule)
 
         result = []
         for horaire_medecin in horaire_medecin_objects:
             data = {
                 "matricule": medecin_matricule,
                 "horaire_medecin_id": horaire_medecin.HoraireMedecinID,
-                "debut": horaire_medecin.horaireID.debut,
-                "fin": horaire_medecin.horaireID.fin,
+                #"debut": horaire_medecin.horaireID.debut,
+                #"fin": horaire_medecin.horaireID.fin,
                 "libre": horaire_medecin.libre,
                 "reservations": []
             }
             for reservation in reservation_objects:
-                if (reservation.dateHeure >= horaire_medecin.horaireID.debut and
-                        reservation.dateHeure <= horaire_medecin.horaireID.fin):
+                #if (reservation.dateHeure >= horaire_medecin.horaireID.debut and
+                        #reservation.dateHeure <= horaire_medecin.horaireID.fin):
                     data["reservations"].append(reservation.id.username)
             result.append(data)
 
