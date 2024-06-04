@@ -15,7 +15,7 @@ class Specialization(models.Model):
 class Medecin(models.Model):
     matricule = models.CharField(primary_key=True , max_length = 50)
     nom = models.CharField(max_length = 25)
-    prenom = models.CharField(max_length = 25)
+    #prenom = models.CharField(max_length = 25)
     mail = models.EmailField(max_length=254, blank=True)
     cabinet = models.CharField(max_length = 25)
     Photo = models.ImageField(upload_to='medecin_photos/', null=False, default=None, blank=True) 
@@ -25,4 +25,4 @@ class Medecin(models.Model):
 
 
     def __str__(self):
-        return f"{self.matricule} - {self.nom} {self.prenom} - {self.grade} - {self.specialization} - {self.tarif}"
+        return f"{self.matricule} - {self.nom} - {self.grade} - {self.specialization} - {self.tarif}"

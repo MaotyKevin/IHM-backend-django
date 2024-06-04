@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 04, 2024 at 01:08 AM
+-- Generation Time: Jun 04, 2024 at 05:47 PM
 -- Server version: 10.6.12-MariaDB-0ubuntu0.22.04.1
 -- PHP Version: 8.1.2-1ubuntu2.14
 
@@ -264,7 +264,8 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (37, 'utilisateur', '0003_remove_utilisateur_first_name_and_more', '2024-04-23 10:36:01.754903'),
 (38, 'horaire', '0007_alter_horaire_debut_alter_horaire_fin', '2024-05-06 18:21:51.751422'),
 (39, 'reservation', '0003_reservation_horairemedecinid', '2024-05-07 07:02:22.926163'),
-(40, 'horaireMedecin', '0003_alter_horairemedecin_libre', '2024-05-07 21:16:11.971418');
+(40, 'horaireMedecin', '0003_alter_horairemedecin_libre', '2024-05-07 21:16:11.971418'),
+(41, 'medecin', '0007_remove_medecin_prenom', '2024-06-04 14:37:31.605719');
 
 -- --------------------------------------------------------
 
@@ -304,13 +305,9 @@ CREATE TABLE `horaireMedecin_horairemedecin` (
 --
 
 INSERT INTO `horaireMedecin_horairemedecin` (`HoraireMedecinID`, `horaireID_id`, `matricule_id`, `libre`) VALUES
-(1, 2, '44563', 1),
-(2, 2, '222344', 0),
-(3, 3, '773453', 0),
-(7, 10, '773453', 0),
-(8, 12, '222344', 1),
-(9, 13, '222344', 1),
-(10, 14, '44563', 1);
+(18, 2, '773453', 0),
+(19, 3, '222344', 0),
+(20, 18, '44563', 1);
 
 -- --------------------------------------------------------
 
@@ -331,11 +328,7 @@ CREATE TABLE `horaire_horaire` (
 INSERT INTO `horaire_horaire` (`horaireID`, `debut`, `fin`) VALUES
 (2, '2024-04-29 15:00:00.000000', '2024-04-29 17:00:00.000000'),
 (3, '2024-04-01 07:30:00.000000', '2024-04-01 09:00:00.000000'),
-(10, '2024-05-06 09:00:00.000000', '2024-05-06 10:00:00.000000'),
-(11, '2024-05-06 09:00:00.000000', '2024-05-06 11:00:00.000000'),
-(12, '2024-04-29 12:00:00.000000', '2024-04-29 13:00:00.000000'),
-(13, '2024-04-29 21:15:00.000000', '2024-04-29 22:00:00.000000'),
-(14, '2024-04-29 08:30:00.000000', '2024-04-29 09:45:00.000000');
+(18, '2024-06-04 03:00:00.000000', '2024-06-04 07:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -366,7 +359,6 @@ INSERT INTO `medecin_grade` (`id`, `nomGrade`) VALUES
 CREATE TABLE `medecin_medecin` (
   `matricule` varchar(50) NOT NULL,
   `nom` varchar(25) NOT NULL,
-  `prenom` varchar(25) NOT NULL,
   `mail` varchar(254) NOT NULL,
   `cabinet` varchar(25) NOT NULL,
   `Photo` varchar(100) NOT NULL,
@@ -379,10 +371,10 @@ CREATE TABLE `medecin_medecin` (
 -- Dumping data for table `medecin_medecin`
 --
 
-INSERT INTO `medecin_medecin` (`matricule`, `nom`, `prenom`, `mail`, `cabinet`, `Photo`, `grade_id`, `specialization_id`, `tarif`) VALUES
-('222344', 'Tokys', 'MandresyA', 'toky@gmail.com', '200', 'medecin_photos/Capture_décran_du_2023-09-19_11-25-11.png', 2, 2, 10000),
-('44563', 'RAKOTO', 'Haja', 'Haja@gmail.com', '301', 'medecin_photos/Capture_décran_du_2023-09-19_11-25-11.png', 3, 4, 7500),
-('773453', 'Nasoloniaina', 'Eric', 'nasolo@gmail.com', '300', 'medecin_photos/Capture_décran_du_2023-09-19_11-25-11.png', 1, 3, 25000);
+INSERT INTO `medecin_medecin` (`matricule`, `nom`, `mail`, `cabinet`, `Photo`, `grade_id`, `specialization_id`, `tarif`) VALUES
+('222344', 'Tokys', 'toky@gmail.com', '200', 'medecin_photos/Capture_décran_du_2023-09-19_11-25-11.png', 2, 2, 10000),
+('44563', 'RAKOTO', 'Haja@gmail.com', '301', 'medecin_photos/Capture_décran_du_2023-09-19_11-25-11.png', 3, 4, 7500),
+('773453', 'Nasoloniaina', 'nasolo@gmail.com', '300', 'medecin_photos/Capture_décran_du_2023-09-19_11-25-11.png', 1, 3, 25000);
 
 -- --------------------------------------------------------
 
@@ -424,10 +416,8 @@ CREATE TABLE `reservation_reservation` (
 --
 
 INSERT INTO `reservation_reservation` (`reservationID`, `dateHeure`, `id_id`, `matricule_id`, `HoraireMedecinID_id`) VALUES
-(5, '2024-04-01 08:00:00.000000', 2, '773453', 3),
-(6, '2024-04-01 09:00:00.000000', 1, '773453', 3),
-(7, '2024-05-06 09:30:00.000000', 3, '773453', 7),
-(8, '2024-04-29 16:00:00.000000', 1, '222344', 2);
+(16, '2024-04-29 15:00:00.000000', 5, '773453', 18),
+(17, '2024-04-01 07:30:00.000000', 6, '222344', 19);
 
 -- --------------------------------------------------------
 
@@ -453,10 +443,8 @@ CREATE TABLE `utilisateur_utilisateur` (
 --
 
 INSERT INTO `utilisateur_utilisateur` (`id`, `password`, `last_login`, `is_superuser`, `username`, `email`, `contact`, `is_active`, `is_staff`, `UserPhoto`) VALUES
-(1, 'pbkdf2_sha256$720000$lbfrTyZEPNVbZW8WMRjhyT$E1wyI4OFWb5ou2YhUsYWpfpFaz8tE6B6lfsUEpfm/1g=', NULL, 1, 'RasoaK', 'rasoa@gmail.com', '912879128', 1, 1, 'patient_photos/Untitled.webp'),
-(2, 'pbkdf2_sha256$720000$bHViXuWebRQieb8e0gDcmS$RfK3mnyKGKuXplUXAcnajEbfkLzfCdJKexZwhxQeISE=', NULL, 1, 'maotykevin', 'maotykevin@gmail.com', '0345654322', 1, 1, ''),
-(3, 'pbkdf2_sha256$720000$zW6rEo44gaKIadzbbjcLes$epDhlfts+8NX0xmRjdegoVA+7iSJXxqKNd38oWw0ayc=', '2024-04-23 09:27:20.897974', 1, 'toky', 'toky@gmail.com', '0345676544', 1, 1, 'patient_photos/Capture_décran_du_2024-01-24_19-01-42.png'),
-(4, 'pbkdf2_sha256$720000$36JlIud8XHGbXbDehq4Wb4$d8WPIMvls2OZRKhKFbQ2gowfSFL3Y1iSFUTA+W2YVw4=', NULL, 0, 'test', 'test@gmail.com', '989', 1, 0, 'patient_photos/hisoka.png');
+(5, 'pbkdf2_sha256$720000$pwDc2pfmVpVgqCdaG8wphB$ILqlXuVpuPUY7P8sj+N4Wcsm+l/NckDw9FT/3hqi5+c=', NULL, 0, 'kevin', 'kevin@gmail.com', '0345676544', 1, 0, 'patient_photos/494d46171e760eca73ecfe310277278c_WkI09iC.jpg'),
+(6, 'pbkdf2_sha256$720000$Dy8j85Jjuc5MWrCXVVAfY9$jzu35PIrG9C3/zFqybmb4oKyu5ApX80BkGZna43nlQY=', NULL, 0, 'ny', 'ny@gmail.com', '0345676578', 1, 0, 'patient_photos/440822590_1847190589110893_2847643096859537557_n.jpg');
 
 -- --------------------------------------------------------
 
@@ -683,19 +671,19 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `horaireMedecin_horairemedecin`
 --
 ALTER TABLE `horaireMedecin_horairemedecin`
-  MODIFY `HoraireMedecinID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `HoraireMedecinID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `horaire_horaire`
 --
 ALTER TABLE `horaire_horaire`
-  MODIFY `horaireID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `horaireID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `medecin_grade`
@@ -713,13 +701,13 @@ ALTER TABLE `medecin_specialization`
 -- AUTO_INCREMENT for table `reservation_reservation`
 --
 ALTER TABLE `reservation_reservation`
-  MODIFY `reservationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `reservationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `utilisateur_utilisateur`
 --
 ALTER TABLE `utilisateur_utilisateur`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `utilisateur_utilisateur_groups`
