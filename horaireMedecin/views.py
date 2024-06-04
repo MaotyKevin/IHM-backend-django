@@ -86,15 +86,24 @@ class GetDataForMedecinBetweenDates(APIView):
 
         return Response(result)
     
-    
-def get_medecin_datas_dispo(specialization):
-    try:
-        special_id = Specialization.objects.get(specialite=specialization)
-    except Specialization.DoesNotExist:
-        return None
 
-    medecin_matricules = Medecin.objects.filter(specialization=special_id)
-    medecin_objects = HoraireMedecin.objects.filter(matricule__in=medecin_matricules)
+def get_medecin_datas_dispo(specialization):
+    medecin_objects = []
+
+    if specialization:
+        try:
+        
+            specialization_object = Specialization.objects.get(specialite=specialization)
+            medecin_matricules = Medecin.objects.filter(specialization=specialization_object)
+            medecin_objects = HoraireMedecin.objects.filter(matricule__in=medecin_matricules)
+        except Specialization.DoesNotExist:
+            try:
+           
+                grade_object = Grade.objects.get(nomGrade=specialization)
+                medecin_matricules = Medecin.objects.filter(grade=grade_object)
+                medecin_objects = HoraireMedecin.objects.filter(matricule__in=medecin_matricules)
+            except Grade.DoesNotExist:
+                return []
 
     return medecin_objects
 
