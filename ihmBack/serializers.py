@@ -118,7 +118,7 @@ class UserWithReservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Utilisateur
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'contact', 'UserPhoto', 'most_recent_reservation']
+        fields = ['id', 'username', 'email',  'contact', 'UserPhoto', 'most_recent_reservation']
 
     def get_most_recent_reservation(self, obj):
         try:

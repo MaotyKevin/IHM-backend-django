@@ -16,13 +16,9 @@ class Reservation(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+        self.HoraireMedecinID.libre = False
+        self.HoraireMedecinID.save(update_fields=['libre'])
  
-        horaire_medecin = HoraireMedecin.objects.filter(
-            matricule=self.matricule,
-            horaireID__debut__lte=self.dateHeure,
-            horaireID__fin__gte=self.dateHeure
-        ).first()
-        if horaire_medecin:
-            horaire_medecin.libre = False
-            #horaire_medecin.save()
-            horaire_medecin.save(update_fields=['libre'])
+        
+      
