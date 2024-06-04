@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -164,3 +165,8 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'utilisateur.Utilisateur'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=4),  # Set your desired access token duration
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Set your desired refresh token duration
+}

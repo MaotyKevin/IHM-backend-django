@@ -73,7 +73,7 @@ class UtilisateurSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Utilisateur
-        fields = ['id', 'username', 'email' , 'contact' , 'password' , 'UserPhoto']
+        fields = ['id', 'username', 'email' , 'contact' , 'password' , 'UserPhoto' , 'is_staff']
         extra_kwargs = {'UserPhoto': {'required': False}}
 
 
