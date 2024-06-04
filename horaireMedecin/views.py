@@ -1,12 +1,13 @@
 # horaireMedecin/views.py
 
+from django.db.models import Q
 from rest_framework import generics , status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import HoraireMedecin 
 from reservation.models import Reservation
 from utilisateur.models import Utilisateur
-from medecin.models import Medecin , Specialization
+from medecin.models import Medecin , Specialization , Grade
 from ihmBack.serializers import HoraireMedecinSerializer , HoraireSerializer 
 from datetime import datetime
 import json
@@ -96,6 +97,8 @@ def get_medecin_datas_dispo(specialization):
     medecin_objects = HoraireMedecin.objects.filter(matricule__in=medecin_matricules)
 
     return medecin_objects
+
+
 
 class get_dispo(APIView):
     def post(self, request):

@@ -21,16 +21,33 @@ class SpelialiteSerializer(serializers.ModelSerializer):
         model = Specialization
         fields = '__all__'
 
+class GradeNameSerial(serializers.ModelSerializer):
+    class Meta:
+        model = Grade
+        fields = ['nomGrade']
+
+class SpeciNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specialization
+        fields = ['specialite']
+
 
 
 
 class MedecinSerializer(serializers.ModelSerializer):
-    Grade = GradeSerializer(source='id', read_only=True)
-    Specialization = SpelialiteSerializer(source='id', read_only=True)
+    grade = serializers.SerializerMethodField()
+    specialization = serializers.SerializerMethodField()
+
     class Meta:
         model = Medecin
-        fields = '__all__'
+        fields = ['matricule', 'nom', 'mail', 'cabinet', 'Photo', 'tarif', 'grade', 'specialization']
         extra_kwargs = {'Photo': {'required': False}}
+
+    def get_specialization(self, obj):
+        return obj.specialization.specialite if obj.specialization else None
+    
+    def get_grade(self, obj):
+        return obj.grade.nomGrade if obj.grade else None
 
 
 
@@ -144,6 +161,8 @@ class PhotoMedecinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medecin
         fields = ['Photo']
+
+
 
 
 
