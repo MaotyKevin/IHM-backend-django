@@ -75,8 +75,9 @@ class GetDataForMedecinBetweenDates(APIView):
 
             if not horaire_medecin.libre:
                 for reservation in reservation_objects:
-                    #if (reservation.dateHeure >= horaire_medecin.horaireID.debut and
-                            #reservation.dateHeure <= horaire_medecin.horaireID.fin):
+                    if (reservation.dateHeure >= horaire_medecin.horaireID.debut and
+                            reservation.dateHeure <= horaire_medecin.horaireID.fin and
+                            reservation.HoraireMedecinID == horaire_medecin): 
                         data["reservations"].append(reservation.id.username)
             result.append(data)
 

@@ -32,6 +32,8 @@ class MedecinSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'Photo': {'required': False}}
 
+
+
 class HoraireSerializer(serializers.ModelSerializer):
 
     class Meta:
