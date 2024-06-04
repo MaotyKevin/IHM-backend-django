@@ -11,7 +11,8 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication , SessionAuthentication , BasicAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.files.storage import default_storage
-
+from rest_framework.exceptions import PermissionDenied
+from rest_framework import permissions, status
 
 
 class UtilisateurListCreateView(generics.ListCreateAPIView):
@@ -76,3 +77,41 @@ class PhotoUpdateAPIView(APIView):
             else:
                 return Response("No photo provided", status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class PromoteUserView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, id):
+   
+        if not request.user.is_staff or not request.user.is_superuser:
+            raise PermissionDenied("You do not have permission to perform this action.")
+
+        try:
+            user = Utilisateur.objects.get(id=id)
+        except Utilisateur.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+   
+        if 'is_staff' in request.data:
+            is_staff = request.data.get('is_staff')
+
+        
+            if isinstance(is_staff, bool):
+                user.is_staff = is_staff
+                user.save()
+                return Response(UtilisateurSerializer(user).data, status=status.HTTP_200_OK)
+            elif isinstance(is_staff, str):
+                if is_staff.lower() in ['true', '1']:
+                    user.is_staff = True
+                elif is_staff.lower() in ['false', '0']:
+                    user.is_staff = False
+                else:
+                    return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
+                user.save()
+                return Response(UtilisateurSerializer(user).data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "is_staff field is required"}, status=status.HTTP_400_BAD_REQUEST)
