@@ -125,6 +125,7 @@ class get_dispo(APIView):
                         "matricule": medecins.matricule.matricule,
                         "nom": medecins.matricule.nom,
                         "mail": medecins.matricule.mail,
+                        "Photo": medecins.matricule.Photo,
                         "tarif": medecins.matricule.tarif,
                         "cabinet" : medecins.matricule.cabinet,
                         "grade": medecins.matricule.grade.nomGrade,
