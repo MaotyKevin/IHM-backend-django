@@ -115,6 +115,8 @@ class get_dispo(APIView):
         specialization = data.get('specialization')
         ref_date = datetime.strptime(data.get('ref_date'), '%Y-%m-%dT%H:%M:%SZ')
 
+        base_url = "http://localhost:8000/"
+
         medecin_object = get_medecin_datas_dispo(specialization)
 
         result = {}
@@ -125,7 +127,7 @@ class get_dispo(APIView):
                         "matricule": medecins.matricule.matricule,
                         "nom": medecins.matricule.nom,
                         "mail": medecins.matricule.mail,
-                        "Photo": medecins.matricule.Photo,
+                        "Photo": f"{base_url}{medecins.matricule.Photo}",
                         "tarif": medecins.matricule.tarif,
                         "cabinet" : medecins.matricule.cabinet,
                         "grade": medecins.matricule.grade.nomGrade,
