@@ -39,7 +39,7 @@ class MedecinSerializer(serializers.ModelSerializer):
     #specialization = serializers.SerializerMethodField()
     grade = serializers.SlugRelatedField(slug_field='nomGrade', queryset=Grade.objects.all(), allow_null=False)
 
-    specialization = serializers.SlugRelatedField(slug_field='specialite', queryset=Specialization.objects.all(), allow_null=False)
+    specialization = serializers.SlugRelatedField(slug_field='specialite', queryset=Specialization.objects.all(), allow_null=True)
 
     class Meta:
         model = Medecin
