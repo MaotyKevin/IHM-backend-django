@@ -124,6 +124,7 @@ class get_dispo(APIView):
                     result[medecins.matricule.matricule] = {
                         "matricule": medecins.matricule.matricule,
                         "nom": medecins.matricule.nom,
+                        "mail": medecins.matricule.mail,
                         "tarif": medecins.matricule.tarif,
                         "cabinet" : medecins.matricule.cabinet,
                         "grade": medecins.matricule.grade.nomGrade,
